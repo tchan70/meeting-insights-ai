@@ -1,108 +1,110 @@
-import { initServer } from '@ts-rest/express';
-import { contract } from './contract';
-import { OpenAIService } from './services/openai.service';
-import { DatabaseService } from './services/database.service';
+import { initServer } from '@ts-rest/express'
+import { contract } from './contract'
+import { OpenAIService } from './services/openai.service'
+import { DatabaseService } from './services/database.service'
 
-const openAIService = new OpenAIService(process.env.OPENAI_API_KEY!);
-const dbService = new DatabaseService();
+const openAIService = new OpenAIService(process.env.OPENAI_API_KEY!)
+const dbService = new DatabaseService()
 
-const s = initServer();
+const s = initServer()
 
 export const router = s.router(contract, {
   analyzeTranscript: async ({ body }) => {
     try {
-      const { transcript } = body;
+      const { transcript } = body
 
       // Check token limits
       if (!openAIService.isWithinTokenLimit(transcript)) {
         return {
           status: 400,
           body: {
-            error: 'Transcript is too long. Please split it into smaller sections or reduce the content.',
+            error:
+              'Transcript is too long. Please split it into smaller sections or reduce the content.',
           },
-        };
+        }
       }
 
       // Analyze with OpenAI
-      const analysisResult = await openAIService.analyzeTranscript(transcript);
+      const analysisResult = await openAIService.analyzeTranscript(transcript)
 
       // Save to database
-      const saved = await dbService.saveAnalysis(transcript, analysisResult);
+      const saved = await dbService.saveAnalysis(transcript, analysisResult)
 
       if (!saved.analysis) {
-        throw new Error('Failed to save analysis');
+        throw new Error('Failed to save analysis')
       }
 
       // Format response
       const response = dbService.formatAnalysisResponse({
         ...saved.analysis,
         transcript: saved,
-      });
+      })
 
       return {
         status: 200,
         body: response,
-      };
+      }
     } catch (error) {
-      console.error('Error analyzing transcript:', error);
-      
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-      
+      console.error('Error analyzing transcript:', error)
+
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error occurred'
+
       // Check if it's a validation or user error vs system error
       if (errorMessage.includes('AI') || errorMessage.includes('invalid')) {
         return {
           status: 400,
           body: { error: errorMessage },
-        };
+        }
       }
 
       return {
         status: 500,
         body: { error: 'Failed to analyze transcript. Please try again.' },
-      };
+      }
     }
   },
 
   getAnalysis: async ({ params }) => {
     try {
-      const analysis = await dbService.getAnalysisById(params.id);
+      const analysis = await dbService.getAnalysisById(params.id)
 
       if (!analysis) {
         return {
           status: 404,
           body: { error: 'Analysis not found' },
-        };
+        }
       }
 
-      const response = dbService.formatAnalysisResponse(analysis);
+      const response = dbService.formatAnalysisResponse(analysis)
 
       return {
         status: 200,
         body: response,
-      };
+      }
     } catch (error) {
-      console.error('Error fetching analysis:', error);
+      console.error('Error fetching analysis:', error)
       return {
         status: 500,
         body: { error: 'Failed to fetch analysis' },
-      };
+      }
     }
   },
 
   listAnalyses: async () => {
     try {
-      const analyses = await dbService.listAnalyses();
+      const analyses = await dbService.listAnalyses()
 
       return {
         status: 200,
         body: { analyses },
-      };
+      }
     } catch (error) {
-      console.error('Error listing analyses:', error);
+      console.error('Error listing analyses:', error)
       return {
         status: 500,
         body: { error: 'Failed to list analyses' },
-      };
+      }
     }
   },
-});
+})

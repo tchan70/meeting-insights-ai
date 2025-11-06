@@ -1,7 +1,7 @@
-import { initContract } from '@ts-rest/core';
-import { z } from 'zod';
+import { initContract } from '@ts-rest/core'
+import { z } from 'zod'
 
-const c = initContract();
+const c = initContract()
 
 // Zod schemas for validation
 export const ActionItemSchema = z.object({
@@ -10,14 +10,14 @@ export const ActionItemSchema = z.object({
   owner: z.string().nullable(),
   deadline: z.string().nullable(),
   priority: z.enum(['high', 'medium', 'low']).nullable(),
-});
+})
 
 export const DecisionSchema = z.object({
   id: z.string(),
   description: z.string(),
   type: z.enum(['made', 'pending']),
   context: z.string().nullable(),
-});
+})
 
 export const AnalysisResponseSchema = z.object({
   id: z.string(),
@@ -27,18 +27,18 @@ export const AnalysisResponseSchema = z.object({
   actionItems: z.array(ActionItemSchema),
   decisions: z.array(DecisionSchema),
   createdAt: z.string(),
-});
+})
 
 export const TranscriptInputSchema = z.object({
   transcript: z
     .string()
     .min(10, 'Transcript must be at least 10 characters')
     .max(50000, 'Transcript is too long. Please limit to 50,000 characters'),
-});
+})
 
 export const ErrorResponseSchema = z.object({
   error: z.string(),
-});
+})
 
 // API Contract
 export const contract = c.router({
@@ -83,6 +83,6 @@ export const contract = c.router({
     },
     summary: 'List all analyses',
   },
-});
+})
 
-export type Contract = typeof contract;
+export type Contract = typeof contract

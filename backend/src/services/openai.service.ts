@@ -1,5 +1,5 @@
-import OpenAI from 'openai';
-import { z } from 'zod';
+import OpenAI from 'openai'
+import { z } from 'zod'
 
 // Schema for LLM response validation
 const LLMResponseSchema = z.object({
@@ -20,15 +20,15 @@ const LLMResponseSchema = z.object({
       context: z.string().nullable(),
     })
   ),
-});
+})
 
-export type LLMAnalysisResult = z.infer<typeof LLMResponseSchema>;
+export type LLMAnalysisResult = z.infer<typeof LLMResponseSchema>
 
 export class OpenAIService {
-  private client: OpenAI;
+  private client: OpenAI
 
   constructor(apiKey: string) {
-    this.client = new OpenAI({ apiKey });
+    this.client = new OpenAI({ apiKey })
   }
 
   async analyzeTranscript(transcript: string): Promise<LLMAnalysisResult> {
@@ -42,7 +42,7 @@ Guidelines:
 - Assess the overall tone professionally
 - Be concise and avoid corporate jargon
 
-Return your analysis in structured JSON format.`;
+Return your analysis in structured JSON format.`
 
     const userPrompt = `Analyze this meeting transcript and extract:
 
@@ -72,7 +72,7 @@ Return ONLY valid JSON matching this exact structure (no markdown, no code block
   "sentimentSummary": "string",
   "actionItems": [{"description": "string", "owner": "string or null", "deadline": "string or null", "priority": "high or medium or low or null"}],
   "decisions": [{"description": "string", "type": "made or pending", "context": "string or null"}]
-}`;
+}`
 
     try {
       const completion = await this.client.chat.completions.create({
@@ -83,36 +83,36 @@ Return ONLY valid JSON matching this exact structure (no markdown, no code block
         ],
         temperature: 0.3, // Lower temperature for more consistent output
         response_format: { type: 'json_object' }, // Ensures JSON response
-      });
+      })
 
-      const content = completion.choices[0]?.message?.content;
-      
+      const content = completion.choices[0]?.message?.content
+
       if (!content) {
-        throw new Error('No response from OpenAI');
+        throw new Error('No response from OpenAI')
       }
 
       // Parse and validate the JSON response
-      const parsed = JSON.parse(content);
-      const validated = LLMResponseSchema.parse(parsed);
+      const parsed = JSON.parse(content)
+      const validated = LLMResponseSchema.parse(parsed)
 
-      return validated;
+      return validated
     } catch (error) {
       if (error instanceof z.ZodError) {
-        console.error('LLM response validation failed:', error.errors);
-        throw new Error('AI generated invalid response format');
+        console.error('LLM response validation failed:', error.errors)
+        throw new Error('AI generated invalid response format')
       }
-      
+
       if (error instanceof SyntaxError) {
-        console.error('Failed to parse LLM response as JSON:', error);
-        throw new Error('AI generated invalid JSON');
+        console.error('Failed to parse LLM response as JSON:', error)
+        throw new Error('AI generated invalid JSON')
       }
 
       if (error instanceof OpenAI.APIError) {
-        console.error('OpenAI API error:', error.message);
-        throw new Error(`AI service error: ${error.message}`);
+        console.error('OpenAI API error:', error.message)
+        throw new Error(`AI service error: ${error.message}`)
       }
 
-      throw error;
+      throw error
     }
   }
 
@@ -121,13 +121,13 @@ Return ONLY valid JSON matching this exact structure (no markdown, no code block
    * Rough estimate: 1 token ≈ 4 characters
    */
   estimateTokens(text: string): number {
-    return Math.ceil(text.length / 4);
+    return Math.ceil(text.length / 4)
   }
 
   /**
    * Check if transcript is within token limits
    */
   isWithinTokenLimit(transcript: string, maxTokens: number = 12000): boolean {
-    return this.estimateTokens(transcript) <= maxTokens;
+    return this.estimateTokens(transcript) <= maxTokens
   }
 }

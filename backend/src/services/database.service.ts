@@ -1,5 +1,5 @@
-import { prisma } from '../lib/prisma';
-import { LLMAnalysisResult } from './openai.service';
+import { prisma } from '../lib/prisma'
+import { LLMAnalysisResult } from './openai.service'
 
 export class DatabaseService {
   /**
@@ -39,9 +39,9 @@ export class DatabaseService {
           },
         },
       },
-    });
+    })
 
-    return result;
+    return result
   }
 
   /**
@@ -59,9 +59,9 @@ export class DatabaseService {
         },
         transcript: true,
       },
-    });
+    })
 
-    return analysis;
+    return analysis
   }
 
   /**
@@ -79,7 +79,7 @@ export class DatabaseService {
           },
         },
       },
-    });
+    })
 
     return analyses.map((analysis) => ({
       id: analysis.id,
@@ -88,13 +88,15 @@ export class DatabaseService {
       createdAt: analysis.createdAt.toISOString(),
       actionItemsCount: analysis._count.actionItems,
       decisionsCount: analysis._count.decisions,
-    }));
+    }))
   }
 
   /**
    * Format analysis data for API response
    */
-  formatAnalysisResponse(analysis: NonNullable<Awaited<ReturnType<typeof this.getAnalysisById>>>) {
+  formatAnalysisResponse(
+    analysis: NonNullable<Awaited<ReturnType<typeof this.getAnalysisById>>>
+  ) {
     return {
       id: analysis.id,
       transcriptId: analysis.transcriptId,
@@ -114,6 +116,6 @@ export class DatabaseService {
         context: decision.context,
       })),
       createdAt: analysis.createdAt.toISOString(),
-    };
+    }
   }
 }
