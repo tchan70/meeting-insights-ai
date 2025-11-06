@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Transcript {
+  id        String    @id @default(cuid())
+  content   String    @db.Text
+  createdAt DateTime  @default(now())
+  analysis  Analysis?
+
+  @@map("transcripts")
+}
+
+model Analysis {
+  id               String   @id @default(cuid())
+  transcriptId     String   @unique
+  transcript       Transcript @relation(fields: [transcriptId], references: [id], onDelete: Cascade)
+  sentiment        String
+  sentimentSummary String?  @db.Text
+  createdAt        DateTime @default(now())
+
+  actionItems ActionItem[]
+  decisions   Decision[]
+
+  @@map("analyses")
+}
+
+model ActionItem {
+  id          String   @id @default(cuid())
+  analysisId  String
+  analysis    Analysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+  description String   @db.Text
+  owner       String?
+  deadline    String?
+  priority    String?
+  createdAt   DateTime @default(now())
+
+  @@map("action_items")
+}
+
+model Decision {
+  id          String   @id @default(cuid())
+  analysisId  String
+  analysis    Analysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+  description String   @db.Text
+  type        String   // "made" or "pending"
+  context     String?  @db.Text
+  createdAt   DateTime @default(now())
+
+  @@map("decisions")
+}

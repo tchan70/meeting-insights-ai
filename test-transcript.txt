@@ -1,0 +1,24 @@
+Hey team, thanks for joining. I wanted to kick off this project
+planning session for Q1.
+Sarah, you mentioned last week you'd have the API design doc
+ready - do you have an update on that?
+Sarah: Yes, I finished it yesterday. The main decision we need to
+make is whether to use REST or GraphQL. I'm leaning toward REST
+for simplicity, but I want to hear thoughts.
+Mike: I agree with REST. We can always add GraphQL later if we
+need it. When can you start implementation?
+Sarah: I can start next Monday. I'll need about 2 weeks for the
+initial version.
+Great, let's move forward with REST. Mike, can you handle the
+frontend integration once Sarah's API is ready?
+Mike: Yep, I'll block out the last week of January for that.
+Perfect. One more thing - we need to nail down our database
+choice. Are we going with Postgres or MongoDB?
+Sarah: I vote Postgres. We'll need transactions and relational
+data.
+Mike: Agreed on Postgres.
+Alright, Postgres it is. Sarah, can you set up the initial schema
+by end of week?
+Sarah: Will do.
+Awesome. Let's reconvene next Wednesday to check progress. Thanks
+everyone!
