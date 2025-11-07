@@ -116,15 +116,30 @@ meeting-insights-ai/
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
-│   │   │   ├── TranscriptInput.tsx
-│   │   │   └── AnalysisResults.tsx
+│   │   │   ├── TranscriptInput.tsx    # Input form component
+│   │   │   ├── AnalysisResults.tsx    # Results display component
+│   │   │   ├── SideBar.tsx            # Navigation sidebar
+│   │   │   ├── LoadingSpinner.tsx     # Loading state component
+│   │   │   └── ErrorAlert.tsx         # Error display component
+│   │   ├── pages/
+│   │   │   ├── Home.tsx               # Home page with transcript input
+│   │   │   ├── ViewAnalysis.tsx       # Single analysis view page
+│   │   │   └── ViewPastAnalyses.tsx   # Past analyses list page
 │   │   ├── lib/
-│   │   │   ├── contract.ts      # Shared API contract
-│   │   │   ├── api-client.ts
-│   │   │   └── api-query.ts
-│   │   ├── App.tsx
-│   │   └── main.tsx
-│   └── package.json
+│   │   │   ├── contract.ts            # Shared API contract (from backend)
+│   │   │   ├── api-client.ts          # ts-rest client
+│   │   │   └── api-query.ts           # React Query integration
+│   │   ├── types/
+│   │   │   └── index.tsx              # TypeScript type definitions
+│   │   ├── App.tsx                    # Main app component
+│   │   ├── main.tsx                   # Entry point
+│   │   ├── index.css                  # Global styles
+│   │   │   └── vite-env.d.ts             # TypeScript declarations
+│   ├── index.html                     # HTML template
+│   ├── vite.config.ts                # Vite configuration
+│   ├── tailwind.config.js            # Tailwind configuration
+│   ├── tsconfig.json                 # TypeScript configuration
+│   └── package.json                  # Dependencies
 │
 └── README.md
 ```
@@ -372,13 +387,12 @@ With more time, I would add:
 
 ### High Priority
 - [ ] Authentication and user accounts
-- [ ] View past analyses (list view with search)
 - [ ] Export results (PDF, Markdown, CSV)
 - [ ] Transcript chunking for very long meetings (>50k chars)
+- [ ] Dark mode support
 
 ### Medium Priority
 - [ ] Real-time analysis progress updates
-- [ ] Dark mode support
 - [ ] File upload for transcripts
 - [ ] Integration with task trackers (Trello, Asana)
 - [ ] Email notifications for action items
@@ -445,7 +459,7 @@ Current approach: Reject transcripts over 50,000 characters with clear error mes
 
 Alternative approaches considered:
 1. **Chunking**: Split into segments and analyze separately
-2. **Summarization**: Pre-summarize then extract insights
+2. **Summarisation**: Pre-summarise then extract insights
 3. **Streaming**: Process in chunks with progress updates
 
 Chose simple rejection for MVP; would implement chunking with more time.
@@ -513,7 +527,7 @@ MIT
 
 ## 👤 Author
 
-Built by [Your Name] for Ambr Technical Assessment
+Built by Toby Chan
 
 ## 🙏 Acknowledgments
 
@@ -524,6 +538,4 @@ Built by [Your Name] for Ambr Technical Assessment
 
 ---
 
-**Time Spent**: ~3-4 hours (as specified)
-
-**Questions?** Email: your.email@example.com
+**Questions?** Reach out to me on [LinkedIn](https://www.linkedin.com/in/toby-chan1/) or by email!
