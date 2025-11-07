@@ -42,16 +42,16 @@ export const ErrorResponseSchema = z.object({
 
 // API Contract
 export const contract = c.router({
-  analyzeTranscript: {
+  AnalyseTranscript: {
     method: 'POST',
-    path: '/api/transcripts/analyze',
+    path: '/api/transcripts/Analyse',
     responses: {
       200: AnalysisResponseSchema,
       400: ErrorResponseSchema,
       500: ErrorResponseSchema,
     },
     body: TranscriptInputSchema,
-    summary: 'Analyze a meeting transcript',
+    summary: 'Analyse a meeting transcript',
   },
   getAnalysis: {
     method: 'GET',

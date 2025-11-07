@@ -66,7 +66,6 @@ The app will be available at `http://localhost:5173`
   - Priority indicators (high/medium/low)
   - Owner tags
   - Deadline tags
-  - Expandable cards
 - **Decisions**: Categorized as:
   - Made (with green check)
   - Pending (with yellow clock)
@@ -87,11 +86,20 @@ frontend/
 ├── src/
 │   ├── components/
 │   │   ├── TranscriptInput.tsx    # Input form component
-│   │   └── AnalysisResults.tsx    # Results display component
+│   │   ├── AnalysisResults.tsx    # Results display component
+│   │   ├── SideBar.tsx            # Navigation sidebar
+│   │   ├── LoadingSpinner.tsx     # Loading state component
+│   │   └── ErrorAlert.tsx         # Error display component
+│   ├── pages/
+│   │   ├── Home.tsx               # Home page with transcript input
+│   │   ├── ViewAnalysis.tsx       # Single analysis view page
+│   │   └── ViewPastAnalyses.tsx   # Past analyses list page
 │   ├── lib/
 │   │   ├── contract.ts            # Shared API contract (from backend)
 │   │   ├── api-client.ts          # ts-rest client
 │   │   └── api-query.ts           # React Query integration
+│   ├── types/
+│   │   └── index.tsx              # TypeScript type definitions
 │   ├── App.tsx                    # Main app component
 │   ├── main.tsx                   # Entry point
 │   ├── index.css                  # Global styles
@@ -112,7 +120,9 @@ frontend/
 
 ## Component Overview
 
-### TranscriptInput
+### Components
+
+#### TranscriptInput
 **Purpose**: Capture meeting transcript from user
 
 **Features**:
@@ -126,7 +136,7 @@ frontend/
 - `onSubmit: (transcript: string) => void`
 - `isLoading: boolean`
 
-### AnalysisResults
+#### AnalysisResults
 **Purpose**: Display AI-generated insights
 
 **Features**:
@@ -139,6 +149,55 @@ frontend/
 **Props**:
 - `analysis: AnalysisResponse`
 - `onNewAnalysis: () => void`
+
+#### SideBar
+**Purpose**: Navigation sidebar for the application
+
+**Features**:
+- Route navigation
+- Active route highlighting
+- Responsive menu
+
+#### LoadingSpinner
+**Purpose**: Reusable loading state indicator
+
+**Features**:
+- Animated spinner
+- Optional loading message
+- Consistent styling across the app
+
+#### ErrorAlert
+**Purpose**: Display error messages to users
+
+**Features**:
+- Clear error messaging
+- Optional retry functionality
+- Dismissible alerts
+
+### Pages
+
+#### Home
+**Purpose**: Main landing page with transcript input
+
+**Features**:
+- Transcript submission form
+- Quick access to analysis
+
+#### ViewAnalysis
+**Purpose**: Display individual analysis results
+
+**Features**:
+- Full analysis details
+- Action items and decisions
+- Sentiment analysis
+
+#### ViewPastAnalyses
+**Purpose**: Browse historical analyses
+
+**Features**:
+- List of past analyses
+- Quick navigation to individual results
+- Search and filter capabilities
 
 ## Design Decisions
 
@@ -196,7 +255,6 @@ Available themes: lara-light-blue, lara-dark-blue, bootstrap4-light-blue, etc.
 
 ## Future Enhancements
 
-- [ ] View past analyses (list view)
 - [ ] Export results as PDF/Markdown
 - [ ] Copy individual items to clipboard
 - [ ] Filter/search within results
@@ -225,7 +283,7 @@ Available themes: lara-light-blue, lara-dark-blue, bootstrap4-light-blue, etc.
 1. Start the backend server
 2. Start the frontend: `npm run dev`
 3. Click "Load Sample" to populate with example transcript
-4. Click "Analyze Transcript"
+4. Click "Analyse Transcript"
 5. View the AI-generated insights
 
 ## Production Build

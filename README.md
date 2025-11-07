@@ -168,8 +168,8 @@ meeting-insights-ai/
 
 ## 📝 API Endpoints
 
-### POST `/api/transcripts/analyze`
-Analyze a meeting transcript.
+### POST `/api/transcripts/analyse`
+Analyse a meeting transcript.
 
 **Request:**
 ```json
@@ -194,11 +194,57 @@ Analyze a meeting transcript.
 ### GET `/api/analyses/:id`
 Retrieve a specific analysis by ID.
 
+**Path Parameters:**
+- `id` - The analysis ID
+
+**Response (200):**
+```json
+{
+  "id": "abc123",
+  "transcriptId": "xyz789",
+  "sentiment": "productive",
+  "sentimentSummary": "The meeting was productive with clear decisions made.",
+  "actionItems": [...],
+  "decisions": [...],
+  "createdAt": "2024-11-04T10:30:00Z"
+}
+```
+
+**Response (404):**
+```json
+{
+  "error": "Analysis not found"
+}
+```
+
 ### GET `/api/analyses`
 List all past analyses (summary view).
 
+**Response (200):**
+```json
+{
+  "analyses": [
+    {
+      "id": "abc123",
+      "transcriptId": "xyz789",
+      "sentiment": "productive",
+      "createdAt": "2024-11-04T10:30:00Z",
+      "actionItemsCount": 3,
+      "decisionsCount": 2
+    }
+  ]
+}
+```
+
 ### GET `/health`
-Health check endpoint.
+Health check endpoint to verify the API is running.
+
+**Response (200):**
+```json
+{
+  "status": "ok"
+}
+```
 
 ## 🎨 Design Decisions
 
@@ -261,15 +307,20 @@ VITE_API_URL="http://localhost:3001"  # Optional, defaults to localhost:3001
 
 **Test with sample transcript:**
 ```bash
-curl -X POST http://localhost:3001/api/transcripts/analyze \
+# Analyse a transcript
+curl -X POST http://localhost:3001/api/transcripts/analyse \
   -H "Content-Type: application/json" \
   -d '{
     "transcript": "Team meeting. Sarah will complete API design by Monday. We decided on PostgreSQL."
   }'
-```
 
-**Check health:**
-```bash
+# Get a specific analysis
+curl http://localhost:3001/api/analyses/abc123
+
+# List all analyses
+curl http://localhost:3001/api/analyses
+
+# Check health
 curl http://localhost:3001/health
 ```
 

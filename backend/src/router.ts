@@ -9,7 +9,7 @@ const dbService = new DatabaseService()
 const s = initServer()
 
 export const router = s.router(contract, {
-  analyzeTranscript: async ({ body }) => {
+  AnalyseTranscript: async ({ body }) => {
     try {
       const { transcript } = body
 
@@ -24,8 +24,8 @@ export const router = s.router(contract, {
         }
       }
 
-      // Analyze with OpenAI
-      const analysisResult = await openAIService.analyzeTranscript(transcript)
+      // Analyse with OpenAI
+      const analysisResult = await openAIService.AnalyseTranscript(transcript)
 
       // Save to database
       const saved = await dbService.saveAnalysis(transcript, analysisResult)
@@ -60,7 +60,7 @@ export const router = s.router(contract, {
 
       return {
         status: 500,
-        body: { error: 'Failed to analyze transcript. Please try again.' },
+        body: { error: 'Failed to Analyse transcript. Please try again.' },
       }
     }
   },

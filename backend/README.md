@@ -87,10 +87,13 @@ The API will be available at `http://localhost:3001`
 
 ## API Endpoints
 
-### POST `/api/transcripts/analyze`
-Analyze a meeting transcript and extract insights.
+### POST `/api/transcripts/analyse`
+
+
+Analyse a meeting transcript and extract insights.
 
 **Request Body:**
+
 ```json
 {
   "transcript": "Meeting transcript text here..."
@@ -98,6 +101,7 @@ Analyze a meeting transcript and extract insights.
 ```
 
 **Response (200):**
+
 ```json
 {
   "id": "abc123",
@@ -126,13 +130,89 @@ Analyze a meeting transcript and extract insights.
 ```
 
 ### GET `/api/analyses/:id`
+
 Retrieve a specific analysis by ID.
 
+**Path Parameters:**
+- `id` - The analysis ID
+
+**Response (200):**
+
+```json
+{
+  "id": "abc123",
+  "transcriptId": "xyz789",
+  "sentiment": "productive",
+  "sentimentSummary": "The meeting was productive with clear decisions made.",
+  "actionItems": [
+    {
+      "id": "item1",
+      "description": "Complete API design doc",
+      "owner": "Sarah",
+      "deadline": "next Monday",
+      "priority": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "dec1",
+      "description": "Use REST API instead of GraphQL",
+      "type": "made",
+      "context": "For simplicity and faster implementation"
+    }
+  ],
+  "createdAt": "2024-11-04T10:30:00Z"
+}
+```
+
+**Response (404):**
+
+```json
+{
+  "error": "Analysis not found"
+}
+```
+
 ### GET `/api/analyses`
+
 List all past analyses (summary view).
 
+**Response (200):**
+
+```json
+{
+  "analyses": [
+    {
+      "id": "abc123",
+      "transcriptId": "xyz789",
+      "sentiment": "productive",
+      "createdAt": "2024-11-04T10:30:00Z",
+      "actionItemsCount": 3,
+      "decisionsCount": 2
+    },
+    {
+      "id": "def456",
+      "transcriptId": "uvw012",
+      "sentiment": "neutral",
+      "createdAt": "2024-11-03T14:15:00Z",
+      "actionItemsCount": 1,
+      "decisionsCount": 0
+    }
+  ]
+}
+```
+
 ### GET `/health`
-Health check endpoint.
+
+Health check endpoint to verify the API is running.
+
+**Response (200):**
+
+```json
+{
+  "status": "ok"
+}
+```
 
 ## Database Schema
 
@@ -163,23 +243,27 @@ The API handles various error cases:
 ## Design Decisions
 
 ### Why ts-rest?
+
 - Type-safe API with shared contract between frontend/backend
 - Better DX than plain Express
 - Zod integration for validation
 
 ### Why GPT-4o-mini?
+
 - Cost-effective for transcript analysis
 - Fast response times
 - Good balance of quality and speed
 - JSON mode for structured output
 
 ### Transcript Length Handling
+
 - Current limit: 50,000 characters (~12,000 tokens)
 - Validates before sending to OpenAI
 - Returns clear error message if too long
 - Future: Could implement chunking strategy
 
 ### Prompt Strategy
+
 - System prompt: Sets role as "meeting minutes specialist"
 - User prompt: Clear instructions for structured extraction
 - Temperature: 0.3 for consistent output
@@ -201,9 +285,19 @@ The API handles various error cases:
 Example test with curl:
 
 ```bash
-curl -X POST http://localhost:3001/api/transcripts/analyze \
+# Analyse a transcript
+curl -X POST http://localhost:3001/api/transcripts/analyse \
   -H "Content-Type: application/json" \
   -d '{
     "transcript": "Team meeting about Q1 planning. Sarah will complete the API design by Monday. We decided to use PostgreSQL for the database."
   }'
+
+# Get a specific analysis
+curl http://localhost:3001/api/analyses/abc123
+
+# List all analyses
+curl http://localhost:3001/api/analyses
+
+# Health check
+curl http://localhost:3001/health
 ```
