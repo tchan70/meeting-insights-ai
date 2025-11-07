@@ -31,8 +31,8 @@ export class OpenAIService {
     this.client = new OpenAI({ apiKey })
   }
 
-  async analyzeTranscript(transcript: string): Promise<LLMAnalysisResult> {
-    const systemPrompt = `You are an expert meeting minutes specialist and executive assistant. Your role is to analyze meeting transcripts and extract actionable insights in a clear, concise manner.
+  async AnalyseTranscript(transcript: string): Promise<LLMAnalysisResult> {
+    const systemPrompt = `You are an expert meeting minutes specialist and executive assistant. Your role is to Analyse meeting transcripts and extract actionable insights in a clear, concise manner.
 
 Guidelines:
 - Remove filler words and redundant content
@@ -44,7 +44,7 @@ Guidelines:
 
 Return your analysis in structured JSON format.`
 
-    const userPrompt = `Analyze this meeting transcript and extract:
+    const userPrompt = `Analyse this meeting transcript and extract:
 
 1. **Action Items**: Specific tasks with:
    - Clear description (concise, actionable)

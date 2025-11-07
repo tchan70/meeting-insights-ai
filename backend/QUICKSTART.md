@@ -10,6 +10,7 @@ npm install
 ```
 
 This will install all the required packages including:
+
 - Express, ts-rest, Zod
 - Prisma and PostgreSQL client
 - OpenAI SDK
@@ -18,6 +19,7 @@ This will install all the required packages including:
 ### 2. Start PostgreSQL Database
 
 **Using Docker (Recommended):**
+
 ```bash
 # Start the database using docker-compose
 docker-compose up -d
@@ -27,6 +29,7 @@ docker ps | grep meeting-insights-db
 ```
 
 **Or using local PostgreSQL:**
+
 ```bash
 # Make sure PostgreSQL is installed and running
 # Create the database
@@ -46,6 +49,7 @@ cp .env.example .env
 ```
 
 **Example .env for Docker setup:**
+
 ```env
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/meeting_insights?schema=public"
 OPENAI_API_KEY="sk-your-actual-openai-key-here"
@@ -65,6 +69,7 @@ npm run db:push
 ```
 
 You should see output like:
+
 ```
 ✔ Generated Prisma Client
 ✔ Database schema synchronized
@@ -77,6 +82,7 @@ npm run dev
 ```
 
 You should see:
+
 ```
 🚀 Server running on port 3001
 📝 API available at http://localhost:3001/api
@@ -86,18 +92,21 @@ You should see:
 ### 6. Test the API
 
 **Test 1: Health Check**
+
 ```bash
 curl http://localhost:3001/health
 ```
 
 Expected response:
+
 ```json
-{"status":"ok","timestamp":"2024-11-04T..."}
+{ "status": "ok", "timestamp": "2024-11-04T..." }
 ```
 
-**Test 2: Analyze a Transcript**
+**Test 2: Analyse a Transcript**
+
 ```bash
-curl -X POST http://localhost:3001/api/transcripts/analyze \
+curl -X POST http://localhost:3001/api/transcripts/Analyse \
   -H "Content-Type: application/json" \
   -d '{
     "transcript": "Hey team, thanks for joining. Sarah, you mentioned last week you'\''d have the API design doc ready - do you have an update? Sarah: Yes, I finished it yesterday. The main decision we need to make is whether to use REST or GraphQL. Mike: I agree with REST. Sarah can you start implementation next Monday? Sarah: Will do, I'\''ll need about 2 weeks."
@@ -105,6 +114,7 @@ curl -X POST http://localhost:3001/api/transcripts/analyze \
 ```
 
 Expected response structure:
+
 ```json
 {
   "id": "clxxx...",
@@ -133,12 +143,14 @@ Expected response structure:
 ```
 
 **Test 3: Get Analysis by ID**
+
 ```bash
 # Use the ID from the previous response
 curl http://localhost:3001/api/analyses/YOUR_ANALYSIS_ID
 ```
 
 **Test 4: List All Analyses**
+
 ```bash
 curl http://localhost:3001/api/analyses
 ```
@@ -148,6 +160,7 @@ curl http://localhost:3001/api/analyses
 ### Database Connection Issues
 
 **Error: "Can't reach database server"**
+
 ```bash
 # Check if PostgreSQL is running
 docker ps | grep meeting-insights-db
@@ -162,10 +175,12 @@ docker-compose restart
 ### OpenAI API Issues
 
 **Error: "Incorrect API key"**
+
 - Verify your API key is correct in `.env`
 - Check you have credits: https://platform.openai.com/usage
 
 **Error: "Rate limit exceeded"**
+
 - Wait a few seconds and try again
 - Consider upgrading your OpenAI plan
 
@@ -183,18 +198,22 @@ npm run db:generate
 ## Database Management
 
 **View data in Prisma Studio:**
+
 ```bash
 npm run db:studio
 ```
+
 Opens at http://localhost:5555
 
 **Reset database (WARNING: Deletes all data):**
+
 ```bash
 npx prisma migrate reset
 npm run db:push
 ```
 
 **Backup data:**
+
 ```bash
 docker exec meeting-insights-db pg_dump -U postgres meeting_insights > backup.sql
 ```
@@ -206,6 +225,7 @@ docker exec meeting-insights-db pg_dump -U postgres meeting_insights > backup.sq
 2. **Check logs**: The server logs all errors to console
 
 3. **Test different transcripts**:
+
    - Short meetings (< 1000 chars)
    - Long meetings (test 50k limit)
    - Meetings with/without clear action items
