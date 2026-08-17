@@ -2,6 +2,7 @@
 
 An AI-powered meeting transcript analyzer that extracts actionable insights including action items, decisions, and sentiment analysis.
 
+[![CI](https://github.com/tchan70/meeting-insights-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/tchan70/meeting-insights-ai/actions/workflows/ci.yml)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)
 ![Node.js](https://img.shields.io/badge/Node.js-43853D?style=flat&logo=node.js&logoColor=white)
@@ -15,7 +16,7 @@ This full-stack application uses OpenAI's GPT-4o-mini to analyze meeting transcr
 - **Key Decisions** (both made and pending)
 - **Meeting Sentiment** and tone analysis
 
-Built as a technical assessment for Ambr, showcasing modern full-stack development practices with TypeScript, type-safe APIs, and AI integration.
+Originally built as a timed technical assessment for Ambr, showcasing modern full-stack development practices with TypeScript, type-safe APIs, and AI integration; since extended with a mocked-LLM/DB test suite (37 tests) and CI covering backend tests and the frontend production build.
 
 ## 🏗️ Tech Stack
 
